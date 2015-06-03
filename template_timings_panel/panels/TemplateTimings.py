@@ -236,6 +236,13 @@ class TemplateTimings(Panel):
 
             return "%.0f ms with %s queries %s" % (base_time, total_template_queries, query_percentage_time)
 
+    def process_request(self, request):
+        if not getattr(settings, 'DDTTT_PER_REQUEST', False):
+            return
+        timings = self._get_timings()
+        if timings:
+            results.timings.clear()
+
     def process_response(self, request, response):
         timings = self._get_timings()
         # Setting default_factory to None allows us to access
